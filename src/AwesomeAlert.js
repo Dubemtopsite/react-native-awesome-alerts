@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import styles from "./styles";
 
 const HwBackHandler = BackHandler;
-const HW_BACNativeEventSubscriptionK_EVENT = "hardwareBackPress";
+const HW_BACK_EVENT = "hardwareBackPress";
 
 const { OS } = Platform;
 

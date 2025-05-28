@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Text,
   Animated,
@@ -9,18 +9,19 @@ import {
   BackHandler,
   Modal,
   Platform,
-} from 'react-native';
+} from "react-native";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import styles from './styles';
+import styles from "./styles";
 
 const HwBackHandler = BackHandler;
-const HW_BACK_EVENT = 'hardwareBackPress';
+const HW_BACNativeEventSubscriptionK_EVENT = "hardwareBackPress";
 
 const { OS } = Platform;
 
 export default class AwesomeAlert extends Component {
+  _backHandlerInstance = null;
   constructor(props) {
     super(props);
     const { show } = this.props;
@@ -34,7 +35,10 @@ export default class AwesomeAlert extends Component {
   }
 
   componentDidMount() {
-    HwBackHandler.addEventListener(HW_BACK_EVENT, this._handleHwBackEvent);
+    this._backHandlerInstance = HwBackHandler.addEventListener(
+      HW_BACK_EVENT,
+      this._handleHwBackEvent
+    );
   }
 
   _springShow = (fromConstructor) => {
@@ -103,8 +107,12 @@ export default class AwesomeAlert extends Component {
     } = data;
 
     return (
-      <TouchableOpacity  style={[styles.button, { backgroundColor }, buttonStyle]} testID={testID} onPress={onPress}>
-          <Text style={[styles.buttonText, buttonTextStyle]}>{text}</Text>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor }, buttonStyle]}
+        testID={testID}
+        onPress={onPress}
+      >
+        <Text style={[styles.buttonText, buttonTextStyle]}>{text}</Text>
       </TouchableOpacity>
     );
   };
@@ -122,7 +130,7 @@ export default class AwesomeAlert extends Component {
       cancelButtonStyle,
       cancelButtonTextStyle,
       onCancelPressed,
-      cancelButtonTestID
+      cancelButtonTestID,
     } = this.props;
 
     const {
@@ -132,7 +140,7 @@ export default class AwesomeAlert extends Component {
       confirmButtonStyle,
       confirmButtonTextStyle,
       onConfirmPressed,
-      confirmButtonTestID
+      confirmButtonTestID,
     } = this.props;
 
     const {
@@ -198,9 +206,9 @@ export default class AwesomeAlert extends Component {
     const { show, showSelf } = this.state;
     const { modalProps = {}, closeOnHardwareBackPress } = this.props;
 
-    const wrapInModal = OS === 'android' || OS === 'ios';
+    const wrapInModal = OS === "android" || OS === "ios";
 
-    return showSelf ?
+    return showSelf ? (
       wrapInModal ? (
         <Modal
           animationType="none"
@@ -215,8 +223,10 @@ export default class AwesomeAlert extends Component {
         >
           {this._renderAlert()}
         </Modal>
-      ) : this._renderAlert()
-    : null;
+      ) : (
+        this._renderAlert()
+      )
+    ) : null;
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -228,7 +238,11 @@ export default class AwesomeAlert extends Component {
   }
 
   componentWillUnmount() {
-    HwBackHandler.removeEventListener(HW_BACK_EVENT, this._handleHwBackEvent);
+    // HwBackHandler.removeEventListener(HW_BACK_EVENT, this._handleHwBackEvent);
+    if (this._backHandlerInstance) {
+      this._backHandlerInstance.remove();
+      this._backHandlerInstance = null;
+    }
   }
 }
 
@@ -256,7 +270,7 @@ AwesomeAlert.propTypes = {
   ]),
   modalProps: PropTypes.object,
   cancelButtonTestID: PropTypes.string,
-  confirmButtonTestID: PropTypes.string
+  confirmButtonTestID: PropTypes.string,
 };
 
 AwesomeAlert.defaultProps = {
@@ -268,12 +282,12 @@ AwesomeAlert.defaultProps = {
   closeOnHardwareBackPress: true,
   showCancelButton: false,
   showConfirmButton: false,
-  cancelText: 'Cancel',
-  confirmText: 'Confirm',
-  cancelButtonColor: '#D0D0D0',
-  confirmButtonColor: '#AEDEF4',
+  cancelText: "Cancel",
+  confirmText: "Confirm",
+  cancelButtonColor: "#D0D0D0",
+  confirmButtonColor: "#AEDEF4",
   customView: null,
   modalProps: {},
-  cancelButtonTestID: 'awesome-alert-cancel-btn',
-  confirmButtonTestID: 'awesome-alert-confirm-btn'
+  cancelButtonTestID: "awesome-alert-cancel-btn",
+  confirmButtonTestID: "awesome-alert-confirm-btn",
 };
